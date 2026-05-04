@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hardware-Abgabe</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f4f0;
+    --surface: #ffffff;
+    --border: #e2e0d8;
+    --text: #1a1917;
+    --muted: #7a7870;
+    --accent: #1a1917;
+    --accent-light: #f0efe9;
+    --success-bg: #eaf3de;
+    --success-text: #3b6d11;
+    --warn-bg: #faeeda;
+    --warn-text: #854f0b;
+    --danger-bg: #fcebeb;
+    --danger-text: #a32d2d;
+    --radius: 10px;
+    --radius-sm: 6px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  /* ── TOPBAR ── */
+  .topbar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px;
+    height: 54px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .topbar-brand { font-weight: 500; letter-spacing: -0.02em; font-size: 16px; }
+  .topbar-nav { display: flex; gap: 4px; }
+  .tab {
+    padding: 6px 14px;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    cursor: pointer;
+    color: var(--muted);
+    border: none;
+    background: none;
+    font-family: inherit;
+    transition: background 0.12s, color 0.12s;
+  }
+  .tab:hover { background: var(--accent-light); color: var(--text); }
+  .tab.active { background: var(--accent); color: #fff; }
+  .topbar-nav { display: none; }
+
+  /* ── LAYOUT ── */
+  .page { display: none; }
+  .page.visible { display: block; }
+  .container { max-width: 640px; margin: 0 auto; padding: 40px 20px; }
+  .container-wide { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+
+  /* ── TYPOGRAPHY ── */
+  h1 { font-size: 26px; font-weight: 500; letter-spacing: -0.03em; margin-bottom: 6px; }
+  h2 { font-size: 17px; font-weight: 500; margin-bottom: 16px; }
+  .subtitle { color: var(--muted); font-size: 14px; margin-bottom: 36px; }
+
+  /* ── CARD ── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-bottom: 16px;
+  }
+
+  /* ── AVAILABILITY PILLS ── */
+  .avail-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 10px;
+    border-radius: 99px;
+    font-size: 12px;
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+  }
+  .avail-ok { background: var(--success-bg); color: var(--success-text); }
+  .avail-low { background: var(--warn-bg); color: var(--warn-text); }
+  .avail-empty { background: var(--danger-bg); color: var(--danger-text); }
+
+  /* ── PRODUCT ROW ── */
+  .product-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .product-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .product-row:first-child { padding-top: 0; }
+  .product-info { flex: 1; }
+  .product-name { font-weight: 500; font-size: 15px; margin-bottom: 3px; }
+  .product-desc { color: var(--muted); font-size: 13px; }
+  .qty-wrap { display: flex; align-items: center; gap: 10px; }
+  .qty-label { font-size: 13px; color: var(--muted); white-space: nowrap; }
+  .qty-input {
+    width: 64px;
+    text-align: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 15px;
+    padding: 7px 8px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg);
+    color: var(--text);
+    transition: border-color 0.12s;
+  }
+  .qty-input:focus { outline: none; border-color: var(--accent); }
+  .qty-input:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  /* ── FORM ── */
+  .field { margin-bottom: 20px; }
+  .field label { display: block; font-size: 13px; font-weight: 500; margin-bottom: 6px; }
+  .field input[type=text] {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    background: var(--surface);
+    color: var(--text);
+    transition: border-color 0.12s;
+  }
+  .field input[type=text]:focus { outline: none; border-color: var(--accent); }
+
+  /* ── BUTTONS ── */
+  .btn {
+    display: inline-block;
+    padding: 10px 22px;
+    border-radius: var(--radius-sm);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    transition: background 0.12s;
+  }
+  .btn:hover { background: var(--accent-light); }
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+  .btn-primary:hover { opacity: 0.88; background: var(--accent); }
+  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+  .btn-danger { border-color: #f09595; color: var(--danger-text); }
+  .btn-danger:hover { background: var(--danger-bg); }
+  .btn-sm { padding: 5px 12px; font-size: 12px; }
+
+  /* ── ALERT ── */
+  .alert {
+    padding: 12px 16px;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+  .alert-success { background: var(--success-bg); color: var(--success-text); }
+  .alert-error { background: var(--danger-bg); color: var(--danger-text); }
+  .alert-info { background: #e6f1fb; color: #185fa5; }
+
+  /* ── KPI GRID ── */
+  .kpi-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 28px; }
+  .kpi { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 22px; }
+  .kpi-label { font-size: 12px; color: var(--muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .kpi-value { font-size: 36px; font-weight: 500; letter-spacing: -0.04em; font-family: 'DM Mono', monospace; }
+  .kpi-sub { font-size: 12px; color: var(--muted); margin-top: 4px; }
+  .kpi-value.low { color: var(--warn-text); }
+  .kpi-value.empty { color: var(--danger-text); }
+
+  /* ── ORDERS TABLE ── */
+  .orders-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .orders-table th {
+    text-align: left;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0 12px 10px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .orders-table td {
+    padding: 11px 12px 11px 0;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    vertical-align: middle;
+  }
+  .orders-table tr:last-child td { border-bottom: none; }
+  .mono { font-family: 'DM Mono', monospace; }
+
+  /* ── SUCCESS STATE ── */
+  .success-state { text-align: center; padding: 48px 0; }
+  .success-icon { font-size: 48px; margin-bottom: 16px; }
+  .success-state h2 { font-size: 22px; margin-bottom: 8px; }
+  .success-state p { color: var(--muted); margin-bottom: 24px; }
+
+  .empty-state { text-align: center; padding: 40px; color: var(--muted); font-size: 14px; }
+
+  @media(max-width:600px) {
+    .topbar { padding: 0 16px; }
+    .container, .container-wide { padding: 24px 16px; }
+    .kpi-grid { grid-template-columns: 1fr 1fr; }
+    .product-row { flex-wrap: wrap; gap: 12px; }
+    .orders-table { font-size: 13px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-brand">Hardware-Abgabe</div>
+  <div class="topbar-nav">
+    <button class="tab active" onclick="showPage('order')">Bestellen</button>
+    <button class="tab" onclick="showPage('admin')">Dashboard</button>
+  </div>
+</div>
+
+<!-- ══════════════ BESTELLSEITE ══════════════ -->
+<div id="page-order" class="page visible">
+  <div class="container">
+    <h1>Hardware gratis mitnehmen</h1>
+    <p class="subtitle">Wähle aus, was du benötigen kannst – kostenlos, solange der Vorrat reicht.</p>
+
+    <div id="order-form-wrap">
+      <div class="card">
+        <h2>Verfügbare Artikel</h2>
+        <div id="avail-notice"></div>
+
+        <div class="product-row">
+          <div class="product-info">
+            <div class="product-name">Monitor</div>
+            <div class="product-desc">
+              <span id="monitor-avail-pill" class="avail-pill avail-ok">40 verfügbar</span>
+            </div>
+          </div>
+          <div class="qty-wrap">
+            <span class="qty-label">Menge (max. 2)</span>
+            <input id="qty-monitor" class="qty-input" type="number" min="0" max="2" value="0">
+          </div>
+        </div>
+
+        <div class="product-row">
+          <div class="product-info">
+            <div class="product-name">Dockingstation</div>
+            <div class="product-desc">
+              <span id="dock-avail-pill" class="avail-pill avail-ok">20 verfügbar</span>
+            </div>
+          </div>
+          <div class="qty-wrap">
+            <span class="qty-label">Menge (max. 1)</span>
+            <input id="qty-dock" class="qty-input" type="number" min="0" max="1" value="0">
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Deine Angaben</h2>
+        <div class="field">
+          <label for="firstname">Vorname</label>
+          <input type="text" id="firstname" placeholder="z.B. Anna">
+        </div>
+        <div class="field">
+          <label for="lastname">Nachname</label>
+          <input type="text" id="lastname" placeholder="z.B. Müller">
+        </div>
+      </div>
+
+      <div id="form-error" class="alert alert-error" style="display:none"></div>
+
+      <button class="btn btn-primary" id="submit-btn" onclick="submitOrder()" style="width:100%;padding:13px">
+        Bestellung absenden
+      </button>
+      <p style="font-size:12px;color:var(--muted);text-align:center;margin-top:12px;">
+        Mit der Bestellung bestätigst du, dass du die Hardware für den Eigenbedarf benötigst.
+      </p>
+    </div>
+
+    <div id="order-success" class="success-state" style="display:none">
+      <div class="success-icon">✓</div>
+      <h2>Bestellung eingegangen!</h2>
+      <p id="success-summary"></p>
+      <button class="btn" onclick="resetOrderForm()">Neue Bestellung</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ ADMIN DASHBOARD ══════════════ -->
+<div id="page-admin" class="page">
+  <div class="container-wide">
+    <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:6px;flex-wrap:wrap;gap:8px">
+      <h1>Dashboard</h1>
+      <button class="btn btn-sm btn-danger" onclick="resetAll()">Bestand zurücksetzen</button>
+    </div>
+    <p class="subtitle">Überblick über verfügbaren Bestand und eingegangene Bestellungen.</p>
+
+    <div class="kpi-grid">
+      <div class="kpi">
+        <div class="kpi-label">Monitore verfügbar</div>
+        <div class="kpi-value" id="kpi-monitor">40</div>
+        <div class="kpi-sub">von 40 total</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">Dockingstationen verfügbar</div>
+        <div class="kpi-value" id="kpi-dock">20</div>
+        <div class="kpi-sub">von 20 total</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px">
+        <h2 style="margin:0">Bestellungen</h2>
+        <span id="order-count" style="font-size:13px;color:var(--muted)"></span>
+      </div>
+      <div id="orders-list">
+        <div class="empty-state">Noch keine Bestellungen vorhanden.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── STATE ──────────────────────────────────────────────
+const INITIAL = { monitors: 40, docks: 20 };
+
+function loadState() {
+  try {
+    const s = localStorage.getItem('hw_state');
+    return s ? JSON.parse(s) : { monitors: INITIAL.monitors, docks: INITIAL.docks, orders: [] };
+  } catch(e) {
+    return { monitors: INITIAL.monitors, docks: INITIAL.docks, orders: [] };
+  }
+}
+
+function saveState(s) {
+  localStorage.setItem('hw_state', JSON.stringify(s));
+}
+
+// ── NAVIGATION ────────────────────────────────────────
+function showPage(p) {
+  document.querySelectorAll('.page').forEach(el => el.classList.remove('visible'));
+  document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+  document.getElementById('page-' + p).classList.add('visible');
+  event.target.classList.add('active');
+  if (p === 'admin') renderAdmin();
+  if (p === 'order') renderOrderPage();
+}
+
+// ── AVAILABILITY DISPLAY ──────────────────────────────
+function pillClass(n, max) {
+  if (n === 0) return 'avail-empty';
+  if (n <= Math.ceil(max * 0.2)) return 'avail-low';
+  return 'avail-ok';
+}
+
+function renderOrderPage() {
+  const s = loadState();
+
+  // Monitor pill
+  const mp = document.getElementById('monitor-avail-pill');
+  mp.className = 'avail-pill ' + pillClass(s.monitors, INITIAL.monitors);
+  mp.textContent = s.monitors > 0 ? s.monitors + ' verfügbar' : 'ausverkauft';
+
+  // Dock pill
+  const dp = document.getElementById('dock-avail-pill');
+  dp.className = 'avail-pill ' + pillClass(s.docks, INITIAL.docks);
+  dp.textContent = s.docks > 0 ? s.docks + ' verfügbar' : 'ausverkauft';
+
+  // Disable inputs if empty
+  const mi = document.getElementById('qty-monitor');
+  mi.disabled = s.monitors === 0;
+  mi.max = Math.min(2, s.monitors);
+  if (s.monitors === 0) mi.value = 0;
+
+  const di = document.getElementById('qty-dock');
+  di.disabled = s.docks === 0;
+  di.max = Math.min(1, s.docks);
+  if (s.docks === 0) di.value = 0;
+
+  // Notice if both empty
+  const notice = document.getElementById('avail-notice');
+  if (s.monitors === 0 && s.docks === 0) {
+    notice.innerHTML = '<div class="alert alert-error" style="margin-bottom:16px">Leider sind alle Artikel vergeben. Bitte wende dich direkt an die IT.</div>';
+  } else {
+    notice.innerHTML = '';
+  }
+}
+
+// ── ORDER SUBMIT ──────────────────────────────────────
+function submitOrder() {
+  const s = loadState();
+  const qm = parseInt(document.getElementById('qty-monitor').value) || 0;
+  const qd = parseInt(document.getElementById('qty-dock').value) || 0;
+  const fn = document.getElementById('firstname').value.trim();
+  const ln = document.getElementById('lastname').value.trim();
+  const errEl = document.getElementById('form-error');
+
+  // Validate
+  if (qm === 0 && qd === 0) {
+    errEl.textContent = 'Bitte wähle mindestens einen Artikel.';
+    errEl.style.display = 'block'; return;
+  }
+  if (!fn || !ln) {
+    errEl.textContent = 'Bitte gib deinen Vor- und Nachnamen ein.';
+    errEl.style.display = 'block'; return;
+  }
+  if (qm > 2) {
+    errEl.textContent = 'Maximal 2 Monitore pro Bestellung.';
+    errEl.style.display = 'block'; return;
+  }
+  if (qd > 1) {
+    errEl.textContent = 'Maximal 1 Dockingstation pro Bestellung.';
+    errEl.style.display = 'block'; return;
+  }
+  if (qm > s.monitors) {
+    errEl.textContent = 'Nicht genügend Monitore verfügbar.';
+    errEl.style.display = 'block'; return;
+  }
+  if (qd > s.docks) {
+    errEl.textContent = 'Nicht genügend Dockingstationen verfügbar.';
+    errEl.style.display = 'block'; return;
+  }
+  errEl.style.display = 'none';
+
+  // Update state
+  s.monitors -= qm;
+  s.docks -= qd;
+  const order = {
+    id: Date.now(),
+    name: fn + ' ' + ln,
+    monitors: qm,
+    docks: qd,
+    ts: new Date().toLocaleString('de-CH')
+  };
+  s.orders.unshift(order);
+  saveState(s);
+
+  // Show success
+  document.getElementById('order-form-wrap').style.display = 'none';
+  const parts = [];
+  if (qm > 0) parts.push(qm + ' Monitor' + (qm > 1 ? 'e' : ''));
+  if (qd > 0) parts.push(qd + ' Dockingstation');
+  document.getElementById('success-summary').textContent =
+    fn + ' ' + ln + ' – ' + parts.join(', ');
+  document.getElementById('order-success').style.display = 'block';
+}
+
+function resetOrderForm() {
+  document.getElementById('order-form-wrap').style.display = 'block';
+  document.getElementById('order-success').style.display = 'none';
+  document.getElementById('qty-monitor').value = 0;
+  document.getElementById('qty-dock').value = 0;
+  document.getElementById('firstname').value = '';
+  document.getElementById('lastname').value = '';
+  renderOrderPage();
+}
+
+// ── ADMIN ─────────────────────────────────────────────
+function renderAdmin() {
+  const s = loadState();
+
+  // KPIs
+  const km = document.getElementById('kpi-monitor');
+  km.textContent = s.monitors;
+  km.className = 'kpi-value ' + (s.monitors === 0 ? 'empty' : s.monitors <= 8 ? 'low' : '');
+
+  const kd = document.getElementById('kpi-dock');
+  kd.textContent = s.docks;
+  kd.className = 'kpi-value ' + (s.docks === 0 ? 'empty' : s.docks <= 4 ? 'low' : '');
+
+  // Orders
+  const el = document.getElementById('orders-list');
+  const countEl = document.getElementById('order-count');
+  countEl.textContent = s.orders.length + ' Bestellung' + (s.orders.length !== 1 ? 'en' : '');
+
+  if (s.orders.length === 0) {
+    el.innerHTML = '<div class="empty-state">Noch keine Bestellungen vorhanden.</div>';
+    return;
+  }
+
+  let rows = s.orders.map(o => {
+    const items = [];
+    if (o.monitors > 0) items.push(o.monitors + '× Monitor');
+    if (o.docks > 0) items.push(o.docks + '× Dock');
+    return `<tr>
+      <td class="mono" style="color:var(--muted);font-size:12px">${o.ts}</td>
+      <td><strong>${o.name}</strong></td>
+      <td>${items.join(', ')}</td>
+      <td><button class="btn btn-sm btn-danger" onclick="deleteOrder(${o.id})">Löschen</button></td>
+    </tr>`;
+  }).join('');
+
+  el.innerHTML = `<table class="orders-table">
+    <thead><tr><th>Datum/Zeit</th><th>Name</th><th>Artikel</th><th></th></tr></thead>
+    <tbody>${rows}</tbody>
+  </table>`;
+}
+
+function deleteOrder(id) {
+  if (!confirm('Bestellung wirklich löschen? Der Bestand wird entsprechend zurückgebucht.')) return;
+  const s = loadState();
+  const o = s.orders.find(x => x.id === id);
+  if (!o) return;
+  s.monitors = Math.min(INITIAL.monitors, s.monitors + o.monitors);
+  s.docks = Math.min(INITIAL.docks, s.docks + o.docks);
+  s.orders = s.orders.filter(x => x.id !== id);
+  saveState(s);
+  renderAdmin();
+}
+
+function resetAll() {
+  if (!confirm('Gesamten Bestand auf 40 Monitore / 20 Dockingstationen zurücksetzen UND alle Bestellungen löschen?')) return;
+  saveState({ monitors: INITIAL.monitors, docks: INITIAL.docks, orders: [] });
+  renderAdmin();
+}
+
+// ── INIT ──────────────────────────────────────────────
+const isAdmin = new URLSearchParams(window.location.search).get('admin') === '1';
+
+if (isAdmin) {
+  // Show nav tabs for admin
+  document.querySelector('.topbar-nav').style.display = 'flex';
+  // Start on admin page
+  document.getElementById('page-order').classList.remove('visible');
+  document.getElementById('page-admin').classList.add('visible');
+  document.querySelectorAll('.tab')[1].classList.add('active');
+  document.querySelectorAll('.tab')[0].classList.remove('active');
+  renderAdmin();
+} else {
+  renderOrderPage();
+}
+</script>
+</body>
+</html>
