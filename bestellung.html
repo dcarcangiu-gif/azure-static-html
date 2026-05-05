@@ -3,107 +3,229 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hardware-Abgabe</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>Hardware-Abgabe – ELEKTRON AG</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #f5f4f0; --surface: #ffffff; --border: #e2e0d8;
-    --text: #1a1917; --muted: #7a7870; --accent: #1a1917;
-    --accent-light: #f0efe9;
-    --success-bg: #eaf3de; --success-text: #3b6d11;
-    --warn-bg: #faeeda; --warn-text: #854f0b;
-    --danger-bg: #fcebeb; --danger-text: #a32d2d;
-    --radius: 10px; --radius-sm: 6px;
+    --blue:          rgb(86, 129, 165);
+    --blue-dark:     rgb(85, 95, 105);
+    --blue-mid:      rgb(131, 141, 151);
+    --blue-light:    rgb(183, 193, 203);
+    --bg:            rgb(244, 246, 247);
+    --black:         rgb(0, 0, 0);
+    --yellow:        rgb(255, 192, 0);
+    --green:         rgb(120, 169, 108);
+
+    --surface:       #ffffff;
+    --border:        var(--blue-light);
+    --text:          var(--black);
+    --muted:         var(--blue-mid);
+    --accent:        var(--blue);
+    --accent-light:  rgba(86,129,165,0.08);
+
+    --success-bg:    rgba(120,169,108,0.12);
+    --success-text:  rgb(60,110,48);
+    --warn-bg:       rgba(255,192,0,0.13);
+    --warn-text:     rgb(130,90,0);
+    --danger-bg:     rgba(200,60,60,0.09);
+    --danger-text:   rgb(160,40,40);
+
+    --radius:    4px;
+    --radius-sm: 2px;
   }
+
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; font-size: 15px; line-height: 1.6; }
 
-  .topbar { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 32px; height: 54px; display: flex; align-items: center; justify-content: space-between; }
-  .topbar-brand { font-weight: 500; letter-spacing: -0.02em; font-size: 16px; }
+  /* ── TOPBAR ── */
+  .topbar {
+    background: var(--surface);
+    border-bottom: 2px solid var(--blue);
+    padding: 0 32px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .topbar-brand {
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--blue);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .topbar-brand::before {
+    content: '';
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background: var(--yellow);
+    border-radius: 50%;
+  }
   .topbar-nav { display: none; gap: 4px; }
-  .tab { padding: 6px 14px; border-radius: var(--radius-sm); font-size: 13px; cursor: pointer; color: var(--muted); border: none; background: none; font-family: inherit; transition: background 0.12s, color 0.12s; }
-  .tab:hover { background: var(--accent-light); color: var(--text); }
-  .tab.active { background: var(--accent); color: #fff; }
+  .tab {
+    padding: 6px 14px;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    cursor: pointer;
+    color: var(--muted);
+    border: none;
+    background: none;
+    font-family: inherit;
+    transition: background 0.12s, color 0.12s;
+    letter-spacing: 0.02em;
+  }
+  .tab:hover { background: var(--accent-light); color: var(--blue); }
+  .tab.active { background: var(--blue); color: #fff; }
 
+  /* ── PAGES ── */
   .page { display: none; }
   .page.visible { display: block; }
   .container { max-width: 640px; margin: 0 auto; padding: 40px 20px; }
   .container-wide { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
 
-  h1 { font-size: 26px; font-weight: 500; letter-spacing: -0.03em; margin-bottom: 6px; }
-  h2 { font-size: 17px; font-weight: 500; margin-bottom: 16px; }
-  .subtitle { color: var(--muted); font-size: 14px; margin-bottom: 36px; }
+  /* ── TYPOGRAPHY ── */
+  h1 { font-size: 24px; font-weight: 500; letter-spacing: -0.01em; margin-bottom: 6px; color: var(--black); }
+  h2 { font-size: 14px; font-weight: 500; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--blue-dark); }
+  .subtitle { color: var(--muted); font-size: 14px; font-weight: 300; margin-bottom: 32px; }
 
-  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; margin-bottom: 16px; }
+  /* ── CARD ── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--blue);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-bottom: 16px;
+  }
 
-  .avail-pill { display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 99px; font-size: 12px; font-family: 'DM Mono', monospace; font-weight: 500; }
-  .avail-ok { background: var(--success-bg); color: var(--success-text); }
-  .avail-low { background: var(--warn-bg); color: var(--warn-text); }
-  .avail-empty { background: var(--danger-bg); color: var(--danger-text); }
+  /* ── PILLS ── */
+  .avail-pill { display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 99px; font-size: 11px; font-family: 'DM Mono', monospace; font-weight: 500; letter-spacing: 0.04em; }
+  .avail-ok    { background: var(--success-bg); color: var(--success-text); }
+  .avail-low   { background: var(--warn-bg);    color: var(--warn-text); }
+  .avail-empty { background: var(--danger-bg);  color: var(--danger-text); }
 
+  /* ── PRODUCT ROW ── */
   .product-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 18px 0; border-bottom: 1px solid var(--border); }
   .product-row:last-child { border-bottom: none; padding-bottom: 0; }
   .product-row:first-child { padding-top: 0; }
   .product-info { flex: 1; }
-  .product-name { font-weight: 500; font-size: 15px; margin-bottom: 3px; }
+  .product-name { font-weight: 500; font-size: 15px; margin-bottom: 4px; }
   .qty-wrap { display: flex; align-items: center; gap: 10px; }
-  .qty-label { font-size: 13px; color: var(--muted); white-space: nowrap; }
-  .qty-input { width: 64px; text-align: center; font-family: 'DM Mono', monospace; font-size: 15px; padding: 7px 8px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--bg); color: var(--text); }
-  .qty-input:focus { outline: none; border-color: var(--accent); }
+  .qty-label { font-size: 12px; color: var(--muted); white-space: nowrap; font-family: 'DM Mono', monospace; }
+  .qty-input {
+    width: 64px; text-align: center;
+    font-family: 'DM Mono', monospace; font-size: 15px;
+    padding: 7px 8px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg); color: var(--text);
+    transition: border-color 0.12s;
+  }
+  .qty-input:focus { outline: none; border-color: var(--blue); }
   .qty-input:disabled { opacity: 0.4; cursor: not-allowed; }
 
-  .field { margin-bottom: 20px; }
-  .field label { display: block; font-size: 13px; font-weight: 500; margin-bottom: 6px; }
-  .field input[type=text] { width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif; font-size: 15px; background: var(--surface); color: var(--text); }
-  .field input[type=text]:focus { outline: none; border-color: var(--accent); }
+  /* ── FORM ── */
+  .field { margin-bottom: 18px; }
+  .field label { display: block; font-size: 12px; font-weight: 500; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--blue-dark); }
+  .field input[type=text] {
+    width: 100%; padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-family: 'DM Sans', sans-serif; font-size: 15px;
+    background: var(--surface); color: var(--text);
+    transition: border-color 0.12s;
+  }
+  .field input[type=text]:focus { outline: none; border-color: var(--blue); }
 
-  .btn { display: inline-block; padding: 10px 22px; border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; border: 1px solid var(--border); background: var(--surface); color: var(--text); transition: background 0.12s; }
-  .btn:hover { background: var(--accent-light); }
-  .btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
-  .btn-primary:hover { opacity: 0.88; }
+  /* ── BUTTONS ── */
+  .btn {
+    display: inline-block; padding: 10px 22px;
+    border-radius: var(--radius-sm);
+    font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500;
+    cursor: pointer; border: 1px solid var(--border);
+    background: var(--surface); color: var(--text);
+    transition: background 0.12s, color 0.12s;
+    letter-spacing: 0.02em;
+  }
+  .btn:hover { background: var(--accent-light); color: var(--blue); border-color: var(--blue-light); }
+  .btn-primary { background: var(--blue); color: #fff; border-color: var(--blue); }
+  .btn-primary:hover { background: var(--blue-dark); opacity: 1; color: #fff; }
   .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
   .btn-danger { border-color: #f09595; color: var(--danger-text); }
   .btn-danger:hover { background: var(--danger-bg); }
   .btn-sm { padding: 5px 12px; font-size: 12px; }
 
-  .alert { padding: 12px 16px; border-radius: var(--radius-sm); font-size: 14px; margin-bottom: 20px; }
-  .alert-error { background: var(--danger-bg); color: var(--danger-text); }
+  /* ── ALERTS ── */
+  .alert { padding: 12px 16px; border-radius: var(--radius-sm); font-size: 14px; margin-bottom: 20px; border-left: 3px solid; }
+  .alert-error { background: var(--danger-bg); color: var(--danger-text); border-color: var(--danger-text); }
 
+  /* ── KPI GRID ── */
   .kpi-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 28px; }
-  .kpi { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 22px; }
-  .kpi-label { font-size: 12px; color: var(--muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.05em; }
-  .kpi-value { font-size: 36px; font-weight: 500; letter-spacing: -0.04em; font-family: 'DM Mono', monospace; }
+  .kpi { background: var(--surface); border: 1px solid var(--border); border-top: 3px solid var(--blue); border-radius: var(--radius); padding: 20px 22px; }
+  .kpi-label { font-size: 11px; color: var(--muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.1em; }
+  .kpi-value { font-size: 40px; font-weight: 500; letter-spacing: -0.03em; font-family: 'DM Mono', monospace; color: var(--blue); }
   .kpi-sub { font-size: 12px; color: var(--muted); margin-top: 4px; }
-  .kpi-value.low { color: var(--warn-text); }
+  .kpi-value.low   { color: var(--warn-text); }
   .kpi-value.empty { color: var(--danger-text); }
 
+  /* ── ORDERS TABLE ── */
   .orders-table { width: 100%; border-collapse: collapse; font-size: 14px; }
-  .orders-table th { text-align: left; font-size: 11px; font-weight: 500; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; padding: 0 12px 10px 0; border-bottom: 1px solid var(--border); }
+  .orders-table th { text-align: left; font-size: 11px; font-weight: 500; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; padding: 0 12px 10px 0; border-bottom: 2px solid var(--blue-light); }
   .orders-table td { padding: 11px 12px 11px 0; border-bottom: 1px solid var(--border); color: var(--text); vertical-align: middle; }
   .orders-table tr:last-child td { border-bottom: none; }
+  .orders-table tr:hover td { background: var(--accent-light); }
   .mono { font-family: 'DM Mono', monospace; }
 
-  .success-state { text-align: center; padding: 48px 0; }
-  .success-icon { font-size: 48px; margin-bottom: 16px; }
-  .success-state h2 { font-size: 22px; margin-bottom: 8px; }
-  .success-state p { color: var(--muted); margin-bottom: 24px; }
+  /* ── SUCCESS STATE ── */
+  .success-state { text-align: center; padding: 56px 0; }
+  .success-icon {
+    width: 56px; height: 56px;
+    background: var(--success-bg);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 20px;
+    font-size: 24px;
+    color: var(--success-text);
+  }
+  .success-state h2 { font-size: 20px; margin-bottom: 8px; letter-spacing: 0; text-transform: none; color: var(--black); }
+  .success-state p { color: var(--muted); margin-bottom: 28px; font-weight: 300; }
   .empty-state { text-align: center; padding: 40px; color: var(--muted); font-size: 14px; }
 
+  /* ── LOADING ── */
   #loading-overlay { position: fixed; inset: 0; background: var(--bg); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; z-index: 100; }
-  .spinner { width: 32px; height: 32px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.7s linear infinite; }
+  .spinner { width: 32px; height: 32px; border: 2px solid var(--border); border-top-color: var(--blue); border-radius: 50%; animation: spin 0.7s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
-  #loading-overlay p { font-size: 14px; color: var(--muted); }
+  #loading-overlay p { font-size: 13px; color: var(--muted); font-family: 'DM Mono', monospace; letter-spacing: 0.06em; }
 
-  .setup-box { background: #fff8e1; border: 1px solid #f0c040; border-radius: var(--radius); padding: 20px 24px; margin-bottom: 24px; font-size: 14px; line-height: 1.8; }
+  /* ── SETUP BOX ── */
+  .setup-box { background: #fff8e1; border: 1px solid #f0c040; border-left: 4px solid var(--yellow); border-radius: var(--radius); padding: 20px 24px; margin-bottom: 24px; font-size: 14px; line-height: 1.8; }
   .setup-box strong { display: block; font-size: 15px; margin-bottom: 8px; }
-  .setup-box code { background: #f5f0dd; padding: 1px 6px; border-radius: 3px; font-family: 'DM Mono', monospace; font-size: 13px; }
-  .setup-box a { color: #185fa5; }
+  .setup-box code { background: #f5f0dd; padding: 1px 6px; border-radius: 2px; font-family: 'DM Mono', monospace; font-size: 13px; }
+  .setup-box a { color: var(--blue); }
+
+  /* ── FOOTER ── */
+  .site-footer {
+    border-top: 1px solid var(--border);
+    padding: 14px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--surface);
+  }
+  .site-footer span { font-size: 12px; color: var(--muted); font-family: 'DM Mono', monospace; letter-spacing: 0.04em; }
+  .footer-bar { display: flex; gap: 4px; }
+  .footer-bar div { height: 4px; width: 20px; border-radius: 2px; }
 
   @media(max-width:600px) {
     .topbar { padding: 0 16px; }
     .container, .container-wide { padding: 24px 16px; }
     .kpi-grid { grid-template-columns: 1fr 1fr; }
     .product-row { flex-wrap: wrap; gap: 12px; }
+    .site-footer { padding: 14px 16px; }
   }
 </style>
 </head>
@@ -115,7 +237,7 @@
 </div>
 
 <div class="topbar">
-  <div class="topbar-brand">Hardware-Abgabe</div>
+  <div class="topbar-brand">Elektron AG</div>
   <div class="topbar-nav" id="topbar-nav">
     <button class="tab active" id="tab-order" onclick="showPage('order')">Bestellen</button>
     <button class="tab" id="tab-admin" onclick="showPage('admin')">Dashboard</button>
@@ -137,7 +259,7 @@
             <div><span id="monitor-avail-pill" class="avail-pill avail-ok">…</span></div>
           </div>
           <div class="qty-wrap">
-            <span class="qty-label">Menge (max. 2)</span>
+            <span class="qty-label">max. 2</span>
             <input id="qty-monitor" class="qty-input" type="number" min="0" max="2" value="0">
           </div>
         </div>
@@ -147,7 +269,7 @@
             <div><span id="dock-avail-pill" class="avail-pill avail-ok">…</span></div>
           </div>
           <div class="qty-wrap">
-            <span class="qty-label">Menge (max. 1)</span>
+            <span class="qty-label">max. 1</span>
             <input id="qty-dock" class="qty-input" type="number" min="0" max="1" value="0">
           </div>
         </div>
@@ -159,7 +281,7 @@
       </div>
       <div id="form-error" class="alert alert-error" style="display:none"></div>
       <button class="btn btn-primary" id="submit-btn" onclick="submitOrder()" style="width:100%;padding:13px">Bestellung absenden</button>
-      <p style="font-size:12px;color:var(--muted);text-align:center;margin-top:12px;">Mit der Bestellung bestätigst du, dass du die Hardware für den Eigenbedarf benötigst.</p>
+      <p style="font-size:12px;color:var(--muted);text-align:center;margin-top:12px;font-weight:300;">Mit der Bestellung bestätigst du, dass du die Hardware für den Eigenbedarf benötigst.</p>
     </div>
     <div id="order-success" class="success-state" style="display:none">
       <div class="success-icon">✓</div>
@@ -200,6 +322,15 @@
   </div>
 </div>
 
+<footer class="site-footer">
+  <span>© ELEKTRON AG · IT-Abteilung</span>
+  <div class="footer-bar">
+    <div style="background:rgb(86,129,165)"></div>
+    <div style="background:rgb(255,192,0)"></div>
+    <div style="background:rgb(120,169,108)"></div>
+  </div>
+</footer>
+
 <script type="module">
 import { initializeApp }       from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getFirestore, doc, getDoc, setDoc, collection,
@@ -220,11 +351,10 @@ const firebaseConfig = {
 };
 // ═══════════════════════════════════════════════════════
 
-const INITIAL = { monitors: 38, docks: 20 };
+const INITIAL = { monitors: 40, docks: 20 };
 const NOT_CONFIGURED = firebaseConfig.apiKey === 'DEIN_API_KEY';
 
 if (NOT_CONFIGURED) {
-  // Zeige Setup-Anleitung statt Loader
   document.getElementById('loading-overlay').style.display = 'none';
   document.getElementById('page-order').querySelector('.container').insertAdjacentHTML('afterbegin', `
     <div class="setup-box">
@@ -247,16 +377,15 @@ function init() {
   const db  = getFirestore(app);
   const stockRef  = doc(db, 'config', 'stock');
   const ordersCol = collection(db, 'orders');
-  const ADMIN_TOKEN = 'HW!2026!'; // <-- dein Geheimwort hier
-  const params = new URLSearchParams(window.location.search);
+
+  const params  = new URLSearchParams(window.location.search);
+  const ADMIN_TOKEN = 'HW!2026!'; // <-- dein Admin-Token
   const isAdmin = params.get('admin') === '1' && params.get('token') === ADMIN_TOKEN;
 
-  // Stock initialisieren falls noch nicht vorhanden
   getDoc(stockRef).then(snap => {
     if (!snap.exists()) setDoc(stockRef, { monitors: INITIAL.monitors, docks: INITIAL.docks });
   });
 
-  // Admin-Modus
   if (isAdmin) {
     document.getElementById('topbar-nav').style.display = 'flex';
     document.getElementById('page-order').classList.remove('visible');
@@ -270,12 +399,10 @@ function init() {
 
   document.getElementById('loading-overlay').style.display = 'none';
 
-  // ── Live-Updates Bestellseite ──
   function listenOrderPage() {
     onSnapshot(stockRef, snap => snap.exists() && renderStock(snap.data()));
   }
 
-  // ── Live-Updates Admin ──
   function listenAdmin() {
     onSnapshot(stockRef, snap => snap.exists() && renderKPIs(snap.data()));
     onSnapshot(query(ordersCol, orderBy('ts', 'desc')), snap => {
@@ -283,7 +410,6 @@ function init() {
     });
   }
 
-  // ── Hilfsfunktionen ──
   function pillClass(n, max) {
     return n === 0 ? 'avail-empty' : n <= Math.ceil(max * 0.2) ? 'avail-low' : 'avail-ok';
   }
@@ -340,7 +466,6 @@ function init() {
     </table>`;
   }
 
-  // ── Bestellung absenden (mit Transaktion gegen Race Conditions) ──
   window._submit = async function() {
     const btn   = document.getElementById('submit-btn');
     const errEl = document.getElementById('form-error');
@@ -376,7 +501,6 @@ function init() {
     }
   };
 
-  // ── Bestellung löschen ──
   window._del = async function(id, monitors, docks) {
     if (!confirm('Bestellung löschen? Bestand wird zurückgebucht.')) return;
     await runTransaction(db, async tx => {
@@ -390,7 +514,6 @@ function init() {
     });
   };
 
-  // ── Bestand zurücksetzen ──
   window._reset = async function() {
     if (!confirm('Gesamten Bestand zurücksetzen UND alle Bestellungen löschen?')) return;
     const snap = await getDocs(ordersCol);
@@ -401,7 +524,6 @@ function init() {
 </script>
 
 <script>
-// Normale (nicht-module) Hilfsfunktionen als Brücke
 function submitOrder()  { if (window._submit) window._submit(); }
 function resetAll()     { if (window._reset)  window._reset();  }
 
