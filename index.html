@@ -3,17 +3,25 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hardware-Abgabe – ab 06.05.2026</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
+<title>Hardware-Abgabe – ELEKTRON AG</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0f0f0d;
-    --surface: #1a1a16;
-    --border: #2e2e28;
-    --text: #f0ede6;
-    --muted: #7a7870;
-    --accent: #c8b97a;
-    --accent-dim: #7a6e3e;
+    --blue:        rgb(86, 129, 165);
+    --blue-dark:   rgb(85, 95, 105);
+    --blue-mid:    rgb(131, 141, 151);
+    --blue-light:  rgb(183, 193, 203);
+    --bg:          rgb(244, 246, 247);
+    --black:       rgb(0, 0, 0);
+    --yellow:      rgb(255, 192, 0);
+    --green:       rgb(120, 169, 108);
+
+    --text:        var(--black);
+    --muted:       var(--blue-dark);
+    --border:      var(--blue-light);
+    --surface:     #ffffff;
+    --accent:      var(--blue);
+    --accent-warm: var(--yellow);
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -25,209 +33,284 @@
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--surface);
+    border-bottom: 2px solid var(--blue);
+    padding: 0 40px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .logo {
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--blue);
+  }
+
+  .logo span {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background: var(--yellow);
+    border-radius: 50%;
+    margin-right: 10px;
+    vertical-align: middle;
+    position: relative;
+    top: -1px;
+  }
+
+  .header-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--blue-mid);
+    letter-spacing: 0.1em;
+  }
+
+  /* ── MAIN ── */
+  main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
-    position: relative;
+    padding: 60px 24px;
   }
 
-  /* Subtle grid background */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image:
-      linear-gradient(var(--border) 1px, transparent 1px),
-      linear-gradient(90deg, var(--border) 1px, transparent 1px);
-    background-size: 48px 48px;
-    opacity: 0.4;
-    pointer-events: none;
+  /* Blue accent bar top */
+  .accent-bar {
+    width: 48px;
+    height: 4px;
+    background: var(--blue);
+    margin-bottom: 32px;
+    animation: growBar 0.7s ease both;
   }
-
-  /* Radial glow */
-  body::after {
-    content: '';
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 700px;
-    height: 700px;
-    background: radial-gradient(circle, rgba(200,185,122,0.07) 0%, transparent 70%);
-    pointer-events: none;
-  }
-
-  .wrap {
-    position: relative;
-    z-index: 1;
-    text-align: center;
-    padding: 40px 24px;
-    max-width: 680px;
-    width: 100%;
-    animation: fadeUp 0.9s ease both;
-  }
-
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to   { opacity: 1; transform: translateY(0); }
+  @keyframes growBar {
+    from { width: 0; opacity: 0; }
+    to   { width: 48px; opacity: 1; }
   }
 
   .eyebrow {
     font-family: 'DM Mono', monospace;
     font-size: 11px;
-    letter-spacing: 0.18em;
-    color: var(--accent);
+    letter-spacing: 0.16em;
+    color: var(--blue-mid);
     text-transform: uppercase;
-    margin-bottom: 24px;
-    animation: fadeUp 0.9s 0.1s ease both;
+    margin-bottom: 20px;
+    animation: fadeUp 0.7s 0.1s ease both;
   }
 
   h1 {
-    font-family: 'DM Serif Display', serif;
-    font-size: clamp(36px, 7vw, 64px);
-    font-weight: 400;
-    line-height: 1.1;
-    letter-spacing: -0.02em;
-    margin-bottom: 20px;
-    animation: fadeUp 0.9s 0.2s ease both;
+    font-size: clamp(28px, 5vw, 48px);
+    font-weight: 300;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    text-align: center;
+    color: var(--black);
+    max-width: 600px;
+    margin-bottom: 16px;
+    animation: fadeUp 0.7s 0.15s ease both;
   }
 
-  h1 em {
-    font-style: italic;
-    color: var(--accent);
+  h1 strong {
+    font-weight: 500;
+    color: var(--blue);
   }
 
   .subtitle {
     font-size: 16px;
-    color: var(--muted);
     font-weight: 300;
+    color: var(--blue-dark);
+    text-align: center;
     line-height: 1.7;
+    max-width: 480px;
     margin-bottom: 56px;
-    animation: fadeUp 0.9s 0.3s ease both;
+    animation: fadeUp 0.7s 0.2s ease both;
   }
 
-  /* Countdown */
-  .countdown {
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── COUNTDOWN ── */
+  .countdown-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--blue);
+    border-radius: 2px;
+    padding: 40px 48px;
     display: flex;
-    justify-content: center;
     gap: 0;
-    margin-bottom: 56px;
-    animation: fadeUp 0.9s 0.4s ease both;
+    margin-bottom: 48px;
+    animation: fadeUp 0.7s 0.3s ease both;
+    box-shadow: 0 2px 16px rgba(86,129,165,0.08);
   }
 
   .cd-unit {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 0 24px;
+    padding: 0 28px;
     position: relative;
   }
 
-  .cd-unit + .cd-unit::before {
-    content: ':';
-    position: absolute;
-    left: -4px;
-    top: 8px;
-    font-family: 'DM Serif Display', serif;
-    font-size: 40px;
-    color: var(--accent-dim);
-    line-height: 1;
+  .cd-unit + .cd-unit {
+    border-left: 1px solid var(--border);
   }
 
   .cd-value {
-    font-family: 'DM Serif Display', serif;
-    font-size: clamp(48px, 10vw, 80px);
+    font-family: 'DM Mono', monospace;
+    font-size: clamp(40px, 8vw, 64px);
+    font-weight: 500;
     line-height: 1;
-    color: var(--text);
+    color: var(--blue);
     min-width: 2ch;
-    transition: color 0.2s;
+    text-align: center;
+    transition: color 0.15s;
   }
 
-  .cd-value.tick {
-    color: var(--accent);
-  }
+  .cd-value.tick { color: var(--yellow); }
 
   .cd-label {
     font-family: 'DM Mono', monospace;
     font-size: 10px;
     letter-spacing: 0.14em;
-    color: var(--muted);
+    color: var(--blue-mid);
     text-transform: uppercase;
-    margin-top: 8px;
+    margin-top: 10px;
   }
 
-  /* Divider */
-  .divider {
-    width: 48px;
-    height: 1px;
-    background: var(--border);
-    margin: 0 auto 40px;
-    animation: fadeUp 0.9s 0.5s ease both;
+  /* ── DATE BOX ── */
+  .date-box {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 14px 24px;
+    animation: fadeUp 0.7s 0.4s ease both;
   }
 
-  .date-line {
+  .date-dot {
+    width: 10px;
+    height: 10px;
+    background: var(--green);
+    border-radius: 50%;
+    flex-shrink: 0;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%       { opacity: 0.5; transform: scale(0.85); }
+  }
+
+  .date-text {
     font-family: 'DM Mono', monospace;
     font-size: 13px;
-    color: var(--muted);
-    letter-spacing: 0.08em;
-    animation: fadeUp 0.9s 0.5s ease both;
+    color: var(--blue-dark);
+    letter-spacing: 0.06em;
   }
 
-  .date-line strong {
-    color: var(--accent);
-    font-weight: 400;
+  .date-text strong {
+    color: var(--black);
+    font-weight: 500;
   }
 
-  /* Go-live state */
+  /* ── GO-LIVE STATE ── */
   .go-live {
     display: none;
     flex-direction: column;
     align-items: center;
     gap: 20px;
-    animation: fadeUp 0.6s ease both;
+    animation: fadeUp 0.5s ease both;
   }
 
   .go-live p {
-    font-size: 17px;
-    color: var(--muted);
+    font-size: 16px;
+    color: var(--blue-dark);
+    font-weight: 300;
   }
 
   .go-live a {
     display: inline-block;
-    padding: 14px 36px;
-    background: var(--accent);
-    color: var(--bg);
+    padding: 14px 40px;
+    background: var(--blue);
+    color: #fff;
     text-decoration: none;
     font-weight: 500;
-    font-size: 15px;
-    border-radius: 4px;
-    letter-spacing: 0.02em;
-    transition: opacity 0.15s;
+    font-size: 14px;
+    letter-spacing: 0.06em;
+    border-radius: 2px;
+    transition: background 0.15s;
   }
 
-  .go-live a:hover { opacity: 0.85; }
+  .go-live a:hover { background: var(--blue-dark); }
 
-  @media(max-width: 480px) {
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 16px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--surface);
+  }
+
+  footer span {
+    font-size: 12px;
+    color: var(--blue-mid);
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.06em;
+  }
+
+  .footer-bar {
+    display: flex;
+    gap: 4px;
+  }
+
+  .footer-bar div {
+    height: 4px;
+    width: 20px;
+    border-radius: 2px;
+  }
+
+  @media(max-width: 560px) {
+    header { padding: 0 20px; }
+    .countdown-wrap { padding: 28px 16px; gap: 0; }
     .cd-unit { padding: 0 14px; }
-    .cd-unit + .cd-unit::before { font-size: 28px; top: 6px; left: -2px; }
-    .subtitle { margin-bottom: 40px; }
-    .countdown { margin-bottom: 40px; }
+    footer { padding: 16px 20px; }
+    .header-label { display: none; }
   }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="eyebrow">IT-Abteilung · Hardware-Abgabe</div>
 
-  <h1>Monitore &amp; Docking&shy;stationen <em>gratis</em> abzugeben.</h1>
+<header>
+  <div class="logo"><span></span>Elektron AG</div>
+  <div class="header-label">Interne Hardware-Abgabe</div>
+</header>
+
+<main>
+  <div class="accent-bar"></div>
+  <div class="eyebrow">IT-Abteilung · Interne Mitteilung</div>
+
+  <h1>Monitore &amp; Dockingstationen<br><strong>kostenlos mitnehmen</strong></h1>
 
   <p class="subtitle">
-    Wir geben interne Hardware kostenlos an Mitarbeitende ab.<br>
-    Die Bestellung wird ab dem <strong style="color:var(--accent);font-weight:500">06. Mai 2026 um 14:00 Uhr</strong> entgegengenommen.
+    Wir geben ausgemusterte Hardware gratis an Mitarbeitende ab.<br>
+    Die Bestellung wird ab folgendem Zeitpunkt entgegengenommen:
   </p>
 
-  <!-- Countdown -->
-  <div class="countdown" id="countdown">
+  <div class="countdown-wrap" id="countdown-wrap">
     <div class="cd-unit">
       <div class="cd-value" id="cd-days">––</div>
       <div class="cd-label">Tage</div>
@@ -246,54 +329,58 @@
     </div>
   </div>
 
-  <div class="divider"></div>
-  <div class="date-line">Bestellstart: <strong>06.05.2026 · 14:00 Uhr</strong></div>
+  <div class="date-box" id="date-box">
+    <div class="date-dot"></div>
+    <div class="date-text">Bestellstart: <strong>06.05.2026 · 14:00 Uhr</strong></div>
+  </div>
 
-  <!-- Shown when countdown reaches zero -->
   <div class="go-live" id="go-live">
-    <p>Die Bestellung ist jetzt offen.</p>
+    <p>Die Bestellung ist jetzt geöffnet.</p>
     <a href="bestellung.html">Zur Bestellung →</a>
   </div>
-</div>
+</main>
+
+<footer>
+  <span>© ELEKTRON AG · IT-Abteilung</span>
+  <div class="footer-bar">
+    <div style="background:rgb(86,129,165)"></div>
+    <div style="background:rgb(255,192,0)"></div>
+    <div style="background:rgb(120,169,108)"></div>
+  </div>
+</footer>
 
 <script>
-  // ── Zieldatum: 06.05.2026 um 14:00 Uhr (Lokalzeit) ──
   const TARGET = new Date('2026-05-06T14:00:00');
 
   const elDays    = document.getElementById('cd-days');
   const elHours   = document.getElementById('cd-hours');
   const elMinutes = document.getElementById('cd-minutes');
   const elSeconds = document.getElementById('cd-seconds');
-  const elCountdown = document.getElementById('countdown');
-  const elGoLive    = document.getElementById('go-live');
-  const elDivider   = document.querySelector('.divider');
-  const elDateLine  = document.querySelector('.date-line');
 
   function pad(n) { return String(n).padStart(2, '0'); }
+
+  function update(el, val) {
+    const str = pad(val);
+    if (el.textContent !== str) {
+      el.textContent = str;
+      el.classList.add('tick');
+      setTimeout(() => el.classList.remove('tick'), 250);
+    }
+  }
 
   function tick() {
     const diff = TARGET - Date.now();
 
     if (diff <= 0) {
-      // Countdown abgelaufen → direkt weiterleiten
       window.location.href = 'bestellung.html';
       return;
     }
 
-    const totalSec = Math.floor(diff / 1000);
-    const days     = Math.floor(totalSec / 86400);
-    const hours    = Math.floor((totalSec % 86400) / 3600);
-    const minutes  = Math.floor((totalSec % 3600) / 60);
-    const seconds  = totalSec % 60;
-
-    function update(el, val) {
-      const str = pad(val);
-      if (el.textContent !== str) {
-        el.textContent = str;
-        el.classList.add('tick');
-        setTimeout(() => el.classList.remove('tick'), 300);
-      }
-    }
+    const total   = Math.floor(diff / 1000);
+    const days    = Math.floor(total / 86400);
+    const hours   = Math.floor((total % 86400) / 3600);
+    const minutes = Math.floor((total % 3600) / 60);
+    const seconds = total % 60;
 
     update(elDays,    days);
     update(elHours,   hours);
