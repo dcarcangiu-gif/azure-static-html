@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hardware-Abgabe – ab 05.05.2026</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f0f0d;
+    --surface: #1a1a16;
+    --border: #2e2e28;
+    --text: #f0ede6;
+    --muted: #7a7870;
+    --accent: #c8b97a;
+    --accent-dim: #7a6e3e;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* Subtle grid background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 48px 48px;
+    opacity: 0.4;
+    pointer-events: none;
+  }
+
+  /* Radial glow */
+  body::after {
+    content: '';
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 700px;
+    height: 700px;
+    background: radial-gradient(circle, rgba(200,185,122,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .wrap {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 40px 24px;
+    max-width: 680px;
+    width: 100%;
+    animation: fadeUp 0.9s ease both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    animation: fadeUp 0.9s 0.1s ease both;
+  }
+
+  h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(36px, 7vw, 64px);
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+    animation: fadeUp 0.9s 0.2s ease both;
+  }
+
+  h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .subtitle {
+    font-size: 16px;
+    color: var(--muted);
+    font-weight: 300;
+    line-height: 1.7;
+    margin-bottom: 56px;
+    animation: fadeUp 0.9s 0.3s ease both;
+  }
+
+  /* Countdown */
+  .countdown {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    margin-bottom: 56px;
+    animation: fadeUp 0.9s 0.4s ease both;
+  }
+
+  .cd-unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 24px;
+    position: relative;
+  }
+
+  .cd-unit + .cd-unit::before {
+    content: ':';
+    position: absolute;
+    left: -4px;
+    top: 8px;
+    font-family: 'DM Serif Display', serif;
+    font-size: 40px;
+    color: var(--accent-dim);
+    line-height: 1;
+  }
+
+  .cd-value {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(48px, 10vw, 80px);
+    line-height: 1;
+    color: var(--text);
+    min-width: 2ch;
+    transition: color 0.2s;
+  }
+
+  .cd-value.tick {
+    color: var(--accent);
+  }
+
+  .cd-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-top: 8px;
+  }
+
+  /* Divider */
+  .divider {
+    width: 48px;
+    height: 1px;
+    background: var(--border);
+    margin: 0 auto 40px;
+    animation: fadeUp 0.9s 0.5s ease both;
+  }
+
+  .date-line {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    animation: fadeUp 0.9s 0.5s ease both;
+  }
+
+  .date-line strong {
+    color: var(--accent);
+    font-weight: 400;
+  }
+
+  /* Go-live state */
+  .go-live {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .go-live p {
+    font-size: 17px;
+    color: var(--muted);
+  }
+
+  .go-live a {
+    display: inline-block;
+    padding: 14px 36px;
+    background: var(--accent);
+    color: var(--bg);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 15px;
+    border-radius: 4px;
+    letter-spacing: 0.02em;
+    transition: opacity 0.15s;
+  }
+
+  .go-live a:hover { opacity: 0.85; }
+
+  @media(max-width: 480px) {
+    .cd-unit { padding: 0 14px; }
+    .cd-unit + .cd-unit::before { font-size: 28px; top: 6px; left: -2px; }
+    .subtitle { margin-bottom: 40px; }
+    .countdown { margin-bottom: 40px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">IT-Abteilung · Hardware-Abgabe</div>
+
+  <h1>Monitore &amp; Docking&shy;stationen <em>gratis</em> mitnehmen.</h1>
+
+  <p class="subtitle">
+    Wir geben interne Hardware kostenlos an Mitarbeitende ab.<br>
+    Die Bestellung wird ab dem <strong style="color:var(--accent);font-weight:500">06. Mai 2026 um 14:00 Uhr</strong> entgegengenommen.
+  </p>
+
+  <!-- Countdown -->
+  <div class="countdown" id="countdown">
+    <div class="cd-unit">
+      <div class="cd-value" id="cd-days">––</div>
+      <div class="cd-label">Tage</div>
+    </div>
+    <div class="cd-unit">
+      <div class="cd-value" id="cd-hours">––</div>
+      <div class="cd-label">Stunden</div>
+    </div>
+    <div class="cd-unit">
+      <div class="cd-value" id="cd-minutes">––</div>
+      <div class="cd-label">Minuten</div>
+    </div>
+    <div class="cd-unit">
+      <div class="cd-value" id="cd-seconds">––</div>
+      <div class="cd-label">Sekunden</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+  <div class="date-line">Bestellstart: <strong>05.05.2026 · 08:35 Uhr</strong></div>
+
+  <!-- Shown when countdown reaches zero -->
+  <div class="go-live" id="go-live">
+    <p>Die Bestellung ist jetzt offen.</p>
+    <a href="bestellung.html">Zur Bestellung →</a>
+  </div>
+</div>
+
+<script>
+  // ── Zieldatum: 06.05.2026 um 14:00 Uhr (Lokalzeit) ──
+  const TARGET = new Date('2026-05-05T08:40:00');
+
+  const elDays    = document.getElementById('cd-days');
+  const elHours   = document.getElementById('cd-hours');
+  const elMinutes = document.getElementById('cd-minutes');
+  const elSeconds = document.getElementById('cd-seconds');
+  const elCountdown = document.getElementById('countdown');
+  const elGoLive    = document.getElementById('go-live');
+  const elDivider   = document.querySelector('.divider');
+  const elDateLine  = document.querySelector('.date-line');
+
+  function pad(n) { return String(n).padStart(2, '0'); }
+
+  function tick() {
+    const diff = TARGET - Date.now();
+
+    if (diff <= 0) {
+      // Countdown abgelaufen → direkt weiterleiten
+      window.location.href = 'bestellung.html';
+      return;
+    }
+
+    const totalSec = Math.floor(diff / 1000);
+    const days     = Math.floor(totalSec / 86400);
+    const hours    = Math.floor((totalSec % 86400) / 3600);
+    const minutes  = Math.floor((totalSec % 3600) / 60);
+    const seconds  = totalSec % 60;
+
+    function update(el, val) {
+      const str = pad(val);
+      if (el.textContent !== str) {
+        el.textContent = str;
+        el.classList.add('tick');
+        setTimeout(() => el.classList.remove('tick'), 300);
+      }
+    }
+
+    update(elDays,    days);
+    update(elHours,   hours);
+    update(elMinutes, minutes);
+    update(elSeconds, seconds);
+  }
+
+  tick();
+  setInterval(tick, 1000);
+</script>
+</body>
+</html>
